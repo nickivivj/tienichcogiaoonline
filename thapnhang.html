@@ -6,37 +6,32 @@
     <title>Thắp Nhang Online</title>
     <style>
         /* --- CẤU HÌNH CHUNG --- */
-        * { box-sizing: border-box; }
         body {
             margin: 0; padding: 0;
-            width: 100vw; 
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* [FIX MOBILE] Chiều cao động tránh lỗi thanh địa chỉ */
+            width: 100vw; height: 100vh;
             background: radial-gradient(circle at 50% 60%, #2a1a10 0%, #000000 80%);
             overflow: hidden; position: relative;
             font-family: 'Times New Roman', serif;
-            user-select: none; -webkit-user-select: none;
-            touch-action: none; /* [FIX MOBILE] Chặn cuộn trang khi kéo */
+            user-select: none; touch-action: none;
         }
 
         /* HƯỚNG DẪN */
         #guide-text {
-            position: absolute; top: 8vh; width: 100%;
+            position: absolute; top: 5vh; width: 100%;
             text-align: center; color: #ffd700;
-            font-size: max(20px, 4vw); font-weight: bold;
+            font-size: max(24px, 4vw); font-weight: bold;
             text-shadow: 0 4px 10px #000;
             z-index: 200; pointer-events: none;
             transition: opacity 0.5s;
             animation: floatText 3s infinite ease-in-out;
-            padding: 0 10px;
         }
 
         /* LỜI KHẤN */
         #prayer-text {
-            position: absolute; top: 15vh; width: 100%;
+            position: absolute; top: 10vh; width: 100%;
             text-align: center; color: #ffeb3b;
-            font-size: max(24px, 5vw); font-weight: bold;
-            text-transform: uppercase; letter-spacing: 1px;
+            font-size: max(30px, 5vw); font-weight: bold;
+            text-transform: uppercase; letter-spacing: 2px;
             text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722;
             opacity: 0; transform: translateY(20px);
             transition: all 1s ease-out;
@@ -46,26 +41,22 @@
 
         /* BÀN THỜ */
         #table {
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            height: 22vh; /* [FIX MOBILE] Cao vừa phải */
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 25vh;
             background: linear-gradient(to bottom, #4e342e, #281814);
             border-top: 1.5vh solid #6d4c41;
             box-shadow: 0 -10px 40px rgba(0,0,0,0.7); z-index: 1;
         }
 
-        /* KHUNG ẢNH - TỰ ĐỘNG CĂN CHỈNH */
+        /* KHUNG ẢNH */
         .frames-area {
-            position: absolute; 
-            bottom: 35vh; /* [FIX MOBILE] Đẩy cao lên tránh bị che bởi lư hương */
-            left: 2%; width: 96%; /* Mở rộng ra mép màn hình */
+            position: absolute; bottom: 50vh; 
+            left: 5%; width: 90%;
             display: flex; justify-content: space-around; align-items: flex-end; z-index: 0;
         }
         .frame {
-            /* [FIX MOBILE] Dùng vmin để ảnh không bao giờ quá to hoặc quá nhỏ */
-            width: 28vmin; height: 38vmin; 
-            max-width: 130px; max-height: 180px; /* Giới hạn trên PC */
-            background: #111; border: 3px solid #ffd700;
-            border-radius: 4px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+            width: 18vmin; height: 24vmin;
+            background: #111; border: 0.5vmin solid #ffd700;
+            border-radius: 4px; box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
             position: relative; overflow: hidden;
         }
         .frame img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
@@ -78,10 +69,8 @@
 
         /* 1. HŨ NẾN */
         #candle-zone {
-            position: absolute; 
-            bottom: 15vh; /* Hạ thấp xíu */
-            right: 5vw; /* Sát lề hơn cho thoáng */
-            width: 10vmin; height: 18vmin; z-index: 50;
+            position: absolute; bottom: 20vh; right: 10vw;
+            width: 8vmin; height: 14vmin; z-index: 50;
         }
         .candle-body {
             width: 100%; height: 100%;
@@ -90,18 +79,16 @@
         }
         .candle-flame {
             position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
-            width: 40%; height: 40%;
+            width: 30%; height: 40%;
             background: #ff9800; border-radius: 50% 50% 20% 20%;
             box-shadow: 0 0 20px #ff5722, 0 0 40px #ff9800;
             animation: flicker 0.1s infinite alternate;
         }
 
-        /* 2. LƯ HƯƠNG */
+        /* 2. LƯ HƯƠNG PHẲNG */
         #burner-zone {
-            position: absolute; bottom: 12vh; left: 50%; transform: translateX(-50%);
-            width: 40vmin; height: 25vmin; /* [FIX MOBILE] To hơn trên đt */
-            max-width: 250px; max-height: 160px;
-            z-index: 40; 
+            position: absolute; bottom: 18vh; left: 50%; transform: translateX(-50%);
+            width: 28vmin; height: 18vmin; z-index: 40; 
             display: flex; justify-content: center; align-items: flex-end;
         }
         
@@ -113,46 +100,44 @@
         }
         .burner-flat-front::after {
             content: '佛'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 8vmin; color: #3e2723; font-weight: bold; opacity: 0.7;
+            font-size: 5vmin; color: #3e2723; font-weight: bold; opacity: 0.7;
         }
 
         .deco-sticks { position: absolute; bottom: 75%; left: 0; width: 100%; height: 100%; z-index: 30; pointer-events: none;}
-        .ds { position: absolute; bottom: 0; width: 1vmin; background: #795548; border-radius: 2px; }
+        .ds { position: absolute; bottom: 0; width: 0.5vmin; background: #795548; border-radius: 2px; }
         
         .ds-left-1 { left: 20%; height: 10vmin; transform: rotate(-12deg); }
         .ds-left-2 { left: 30%; height: 13vmin; transform: rotate(-8deg); background: #555; }
         .ds-left-3 { left: 38%; height: 9vmin; transform: rotate(-5deg); }
+        
         .ds-right-1 { left: 62%; height: 11vmin; transform: rotate(5deg); }
         .ds-right-2 { left: 70%; height: 14vmin; transform: rotate(8deg); background: #555; }
         .ds-right-3 { left: 80%; height: 9vmin; transform: rotate(12deg); }
+        
         .ds-smoke { position: absolute; top: -20%; left: 70%; width: 1vmin; height: 5vmin; background:rgba(255,255,255,0.1); filter:blur(3px); animation: smokeRise 4s infinite; }
 
 
         /* 3. CÂY NHANG CHÍNH */
         #incense {
-            position: absolute; 
-            bottom: 10vh; /* Hạ thấp để dễ với tay */
-            left: 5vw; /* Sát lề trái */
-            /* [FIX MOBILE] Vùng chạm (Hitbox) cực to để dễ kéo */
-            width: 15vmin; height: 45vmin; 
+            position: absolute; bottom: 15vh; left: 10vw;
+            width: 10vmin; height: 35vmin;
             z-index: 100; cursor: grab; display: flex; justify-content: center; align-items: flex-end;
             transition: transform 0.05s linear;
-            /* Debug: border: 1px solid red; */
         }
         
-        .stick-group { position: relative; width: 1.5vmin; height: 100%; pointer-events: none; }
+        .stick-group { position: relative; width: 1vmin; height: 100%; }
         .stick-leg { position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: #d50000; }
         .stick-body { position: absolute; bottom: 40%; left: 0; width: 100%; height: 60%; background: #795548; border-radius: 3px 3px 0 0;}
 
         #fire-tip {
-            position: absolute; top: 0; left: -50%; width: 200%; height: 2vmin;
+            position: absolute; top: 0; left: -25%; width: 150%; height: 1.5vmin;
             background: #ff3d00; border-radius: 50%;
             box-shadow: 0 0 15px red, 0 0 10px yellow;
             opacity: 0; transition: opacity 0.3s;
         }
         #smoke {
             position: absolute; top: -25%; left: 50%; transform: translateX(-50%);
-            width: 3vmin; height: 12vmin;
+            width: 2vmin; height: 10vmin;
             background: rgba(255,255,255,0.4); filter: blur(6px); border-radius: 50%;
             opacity: 0; animation: smokeRise 2s infinite linear;
         }
@@ -162,12 +147,11 @@
         /* NÚT RESET */
         #reset-btn {
             position: absolute; bottom: 8vh; left: 50%; transform: translateX(-50%);
-            padding: 1.5vh 6vw; font-size: max(16px, 3vmin); font-weight: bold; color: #3e2723;
+            padding: 1.5vh 4vw; font-size: max(16px, 2.5vmin); font-weight: bold; color: #3e2723;
             background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
             border: 3px solid #fff; border-radius: 50px; cursor: pointer;
             box-shadow: 0 0 25px #ffd700; text-transform: uppercase;
             display: none; z-index: 200; animation: popUp 0.5s forwards;
-            white-space: nowrap; /* [FIX MOBILE] Chống xuống dòng */
         }
 
         /* ANIMATIONS */
@@ -190,7 +174,7 @@
     <button id="reset-btn" onclick="resetGame()">Thắp lại</button>
 
     <div class="frames-area">
-        <div class="frame"><img src="images/nanami.jpg" alt=""></div>
+        <div class="frame"><img src="images/nanami.jpg""></div>
         <div class="frame"><img src="images/thanos.webp" alt=""></div>
         <div class="frame"><img src="images/eren.jpg" alt=""></div>
     </div>
@@ -225,9 +209,6 @@
     </div>
 
     <script>
-        // [FIX MOBILE] Bỏ việc scale body vì gây lỗi tọa độ cảm ứng
-        // Thay vào đó dùng đơn vị vmin/dvh trong CSS để tự co giãn
-        
         let isZoomed = false;
         let isLit = false;
         let isPlaced = false;
@@ -242,6 +223,7 @@
         const candleZone = document.getElementById('candle-zone');
         const burnerZone = document.getElementById('burner-zone');
 
+        // KHAI BÁO ÂM THANH
         const bgMusic = document.getElementById('bg-music');
         const bongSound = document.getElementById('bong-sound');
 
@@ -249,11 +231,14 @@
         body.addEventListener('click', function(e) {
             if (!isZoomed && e.target.id !== 'reset-btn') {
                 isZoomed = true;
-                // [FIX MOBILE] Không zoom body nữa, chỉ ẩn hiện UI
+                body.style.transition = "transform 1s ease";
+                body.style.transform = "scale(1.1)";
                 guide.innerText = "Kéo nhang vào ngọn nến để châm lửa";
                 
-                bgMusic.volume = 0.5;
-                bgMusic.play().catch(error => console.log("Chờ tương tác"));
+                // PHÁT NHẠC NỀN
+                bgMusic.volume = 0.5; // Âm lượng 50%
+                bgMusic.play().catch(error => console.log("Chưa tương tác, chưa phát nhạc được"));
+
                 initDrag();
             }
         });
@@ -266,67 +251,41 @@
         }
         function dragStart(e) {
             if (isPlaced || !isZoomed) return;
-            // [FIX MOBILE] Ngăn hành động mặc định để không bị cuộn trang
-            if(e.cancelable) e.preventDefault();
-            
-            if (e.type === 'touchstart') { 
-                startX = e.touches[0].clientX; 
-                startY = e.touches[0].clientY; 
-            } else { 
-                startX = e.clientX; 
-                startY = e.clientY; 
-            }
-            
+            if (e.type === 'touchstart') { startX = e.touches[0].clientX; startY = e.touches[0].clientY; } 
+            else { startX = e.clientX; startY = e.clientY; }
             const style = window.getComputedStyle(incense);
             const matrix = new WebKitCSSMatrix(style.transform);
             initialX = matrix.m41; initialY = matrix.m42;
-            
             document.addEventListener('mousemove', dragMove); document.addEventListener('touchmove', dragMove, {passive: false});
             document.addEventListener('mouseup', dragEnd); document.addEventListener('touchend', dragEnd);
-            
             incense.style.cursor = 'grabbing'; incense.style.transition = 'none';
         }
-
         function dragMove(e) {
-            if(e.cancelable) e.preventDefault();
-            
+            e.preventDefault();
             let clientX, clientY;
-            if (e.type === 'touchmove') { 
-                clientX = e.touches[0].clientX; 
-                clientY = e.touches[0].clientY; 
-            } else { 
-                clientX = e.clientX; 
-                clientY = e.clientY; 
-            }
-            
-            // [FIX MOBILE] Di chuyển trực tiếp 1:1, không qua scale
-            const dx = clientX - startX; 
-            const dy = clientY - startY;
-            currentX = initialX + dx; 
-            currentY = initialY + dy;
-            
+            if (e.type === 'touchmove') { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; } 
+            else { clientX = e.clientX; clientY = e.clientY; }
+            const dx = clientX - startX; const dy = clientY - startY;
+            currentX = initialX + dx; currentY = initialY + dy;
             incense.style.transform = `translate(${currentX}px, ${currentY}px)`;
             checkCollision();
         }
-
         function dragEnd() {
             document.removeEventListener('mousemove', dragMove); document.removeEventListener('touchmove', dragMove);
             document.removeEventListener('mouseup', dragEnd); document.removeEventListener('touchend', dragEnd);
             incense.style.cursor = 'grab';
         }
 
+        // CHECK COLLISION
         function checkCollision() {
             const incenseRect = incense.getBoundingClientRect();
             const candleRect = candleZone.getBoundingClientRect();
             const burnerRect = burnerZone.getBoundingClientRect();
             const tipX = incenseRect.left + incenseRect.width / 2; const tipY = incenseRect.top; 
 
-            // [FIX MOBILE] Tăng vùng va chạm lên 30px để dễ trúng
-            const hitPadding = 30;
-
             if (!isLit) {
-                if (tipX >= candleRect.left - hitPadding && tipX <= candleRect.right + hitPadding &&
-                    tipY >= candleRect.top - hitPadding && tipY <= candleRect.bottom + hitPadding) {
+                if (tipX >= candleRect.left - 30 && tipX <= candleRect.right + 30 &&
+                    tipY >= candleRect.top - 30 && tipY <= candleRect.bottom + 30) {
                     isLit = true; fireTip.style.opacity = 1; smoke.style.opacity = 1;
                     guide.innerText = "Đã cháy! Cắm vào giữa lư hương."; guide.style.color = "#ff4500";
                 }
@@ -340,6 +299,7 @@
             }
         }
 
+        // CẮM NHANG
         function placeIncense() {
             isPlaced = true;
             document.removeEventListener('mousemove', dragMove); document.removeEventListener('touchmove', dragMove);
@@ -348,31 +308,33 @@
             incense.style.transform = "none"; 
             incense.classList.add('placed'); 
             
-            // Căn giữa tương đối
-            incense.style.left = "calc(50% - 7.5vmin)"; // Trừ 1 nửa width của incense
-            incense.style.bottom = "18vh"; 
+            incense.style.left = "calc(50% - 5vmin)"; 
+            incense.style.bottom = "22vh"; 
             
             guide.style.opacity = 0; 
             
-            bongSound.currentTime = 0; bongSound.play();
+            // PHÁT TIẾNG MÕ
+            bongSound.currentTime = 0;
+            bongSound.play();
 
             setTimeout(() => { prayer.classList.add('show'); }, 600);
             setTimeout(() => { resetBtn.style.display = "block"; }, 1500);
         }
 
+        // RESET
         function resetGame() {
             isZoomed = false; isLit = false; isPlaced = false; currentX = 0; currentY = 0;
             resetBtn.style.display = 'none';
+            body.style.transform = "scale(1)";
             
             incense.style.transition = "all 1s ease";
             incense.classList.remove('placed'); 
             fireTip.style.opacity = 0; smoke.style.opacity = 0;
             incense.style.transform = "none"; 
-            
-            // Vị trí Reset
-            incense.style.left = "5vw"; incense.style.bottom = "10vh";
+            incense.style.left = "10vw"; incense.style.bottom = "15vh";
             
             guide.style.opacity = 1; guide.innerText = "Bấm vào màn hình để hành lễ"; guide.style.color = "#ffd700";
+            
             prayer.classList.remove('show');
         }
     </script>
