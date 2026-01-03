@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Web Cầu May</title>
+    <style>
+        /* --- MÀN HÌNH INTRO XẤU QUẮC --- */
+        #screen-intro {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: white; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        #btn-ugly {
+            font-family: Arial, sans-serif; font-size: 12px;
+            background-color: #f0f0f0; border: 1px solid #999;
+            padding: 5px 10px; cursor: pointer; color: black; text-transform: lowercase;
+        }
+        #btn-ugly:active { background-color: #ccc; }
+
+        /* --- GIAO DIỆN CHÍNH --- */
+        body {
+            font-family: 'Times New Roman', serif;
+            background-color: #8B0000;
+            
+            /* Đường dẫn ảnh nền */
+            background-image: url('images/background.jpg'); 
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+            margin: 0; text-align: center;
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        /* Container chính */
+        .container {
+            background: rgba(0, 0, 0, 0.85);
+            color: #FFD700;
+            width: 90%; 
+            max-width: 450px;
+            padding: 30px 20px;
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 20px #FFD700;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        h1 { 
+            text-transform: uppercase; 
+            text-shadow: 2px 2px 4px #000; 
+            margin-top: 0; 
+            margin-bottom: 10px; 
+            font-size: 1.5em;
+            line-height: 1.3;
+        }
+        
+        h2 { text-transform: uppercase; margin-top: 0; font-size: 1.3em; }
+        
+        .hidden { display: none !important; }
+
+        .intro-text p { font-size: 1em; margin: 5px 0; line-height: 1.4; }
+        .intro-sub { font-style: italic; font-size: 0.85em; opacity: 0.8; margin-top: 10px !important; }
+
+        label { display: block; text-align: left; margin-top: 10px; font-weight: bold; color: #FFD700; font-size: 0.9em; }
+
+        input, select {
+            width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box;
+            border-radius: 5px; border: 1px solid #FFD700; background: #fff;
+            font-family: 'Times New Roman', serif; 
+            font-size: 16px;
+            color: #000;
+        }
+
+        .btn-fancy {
+            background-color: #FFD700; color: #8B0000; border: none;
+            padding: 12px 20px;
+            font-size: 16px; font-weight: bold;
+            border-radius: 50px; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: all 0.2s;
+            width: 100%;
+        }
+        .btn-fancy:hover { transform: scale(1.02); background-color: #ffe066; }
+
+        .god-image { 
+            width: 100px; height: 100px;
+            border-radius: 50%; object-fit: cover; 
+            border: 3px solid #FFD700; margin-bottom: 10px; 
+        }
+
+        .certificate-paper {
+            background-color: #fff8dc; color: #8B0000; padding: 20px 15px;
+            border: 4px double #8B0000; border-radius: 0px; margin-top: 10px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5); position: relative;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .stamp {
+            border: 2px solid red; color: red; display: inline-block;
+            padding: 3px 8px; font-weight: bold; text-transform: uppercase;
+            border-radius: 5px; transform: rotate(-15deg); margin-top: 15px;
+            opacity: 0.8; font-size: 1em;
+        }
+
+        .result-text { font-size: 1.1em; line-height: 1.5; font-weight: bold; margin-top: 10px; }
+        .fade-in { animation: fadeIn 0.8s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (min-width: 768px) {
+            h1 { font-size: 2em; }
+            .btn-fancy { width: auto; padding: 15px 40px; font-size: 18px; }
+            .god-image { width: 130px; height: 130px; }
+            .container { padding: 40px; }
+            .certificate-paper { padding: 30px; border-width: 5px; }
+            .result-text { font-size: 1.3em; }
+            .stamp { font-size: 1.3em; padding: 5px 15px; border-width: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <audio id="sound-bong" src="sounds/bong.mp3"></audio>
+    <audio id="bg-music" src="sounds/bgmusic.mp3" loop></audio>
+    <audio id="music-success" src="sounds/success.mp3" loop></audio>
+    <audio id="music-fail" src="sounds/fail.mp3" loop></audio>
+
+    <div id="screen-intro">
+        <button id="btn-ugly" onclick="startApp()">bắt đầu</button>
+    </div>
+
+    <div id="main-app" class="hidden">
+        <div class="container">
+            <div id="screen-home">
+                <img src="images/bottas.jpg" alt="Thần Bottas" class="god-image" onerror="this.src='https://via.placeholder.com/150/FFFF00/000000?text=Bottas'">
+                <h1>Đền Thờ Bottas Vivj</h1>
+                <div class="intro-text">
+                    <p>Bạn đang lo lắng vì kì thi sắp tới?</p>
+                    <p>Bạn muốn được phù hộ độ trì?</p>
+                    <p class="intro-sub">(Tâm thành thì điểm cao - Chọn lễ vật cho khéo)</p>
+                </div>
+                <button class="btn-fancy" onclick="goToForm()">🙏 TÔI MUỐN CẦU MAY</button>
+            </div>
+
+            <div id="screen-form" class="hidden">
+                <h2>Dâng Lễ Vật</h2>
+                <label>Tên thí sinh:</label>
+                <input type="text" id="name" placeholder="Nhập họ tên...">
+                <label>Môn thi:</label>
+                <input type="text" id="subject" placeholder="VD: Triết học Mác - Lênin...">
+                <label>Ngày thi:</label>
+                <input type="date" id="date">
+                <label>Lễ vật dâng lên:</label>
+                <select id="offering">
+                    <option value="good-1">Dinh Độc Lập</option>
+                    <option value="good-2">Gấu bông Joke Bear</option>
+                    <option value="bad-1">Rau má (Cẩn thận!)</option>
+                    <option value="good-3">Bộ vô lăng F1</option>
+                    <option value="good-4">Gear guitar điện</option>
+                    <option value="bad-2">Cà tím xào</option>
+                    <option value="good-5">Truyện Sherlock Holmes</option>
+                    <option value="bad-3">Canh mồng tơi</option>
+                    <option value="good-6">Comm Johnfleur</option>
+                    <option value="bad-4">Chân gà sả ớt</option>
+                </select>
+                <button class="btn-fancy" onclick="submitPrayer()">🔔 DÂNG LỄ & CẦU NGUYỆN</button>
+            </div>
+
+            <div id="screen-result" class="hidden">
+                <div class="certificate-paper fade-in">
+                    <img src="images/bottas.jpg" alt="Thần Bottas" class="god-image" style="border-color: #8B0000; width: 80px; height: 80px; margin-bottom: 0;" onerror="this.src='https://via.placeholder.com/150/FFFF00/000000?text=Bottas'">
+                    <div id="result-content" class="result-text"></div>
+                    <div id="stamp-box" class="stamp">ĐÃ CHỨNG GIÁM</div>
+                </div>
+                <button class="btn-fancy" onclick="resetToInput()">Tiếp tục cầu may</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startApp() {
+            document.getElementById('screen-intro').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            const bgMusic = document.getElementById('bg-music');
+            bgMusic.volume = 0.5; bgMusic.play();
+        }
+
+        function goToForm() {
+            document.getElementById('screen-home').classList.add('hidden');
+            document.getElementById('screen-form').classList.remove('hidden');
+        }
+
+        function resetToInput() {
+            const musicSuccess = document.getElementById('music-success');
+            const musicFail = document.getElementById('music-fail');
+            musicSuccess.pause(); musicSuccess.currentTime = 0;
+            musicFail.pause(); musicFail.currentTime = 0;
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic.paused) bgMusic.play();
+            
+            document.getElementById('name').value = "";
+            document.getElementById('subject').value = "";
+            document.getElementById('date').value = "";
+            document.getElementById('offering').value = "good-1";
+            
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-form').classList.remove('hidden');
+        }
+
+        function submitPrayer() {
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const dateInput = document.getElementById('date').value;
+            const offeringValue = document.getElementById('offering').value;
+
+            if (!name || !subject || !dateInput) {
+                alert("Thí sinh chưa điền đủ thông tin!"); return;
+            }
+
+            const dateFormatted = new Date(dateInput).toLocaleDateString('vi-VN');
+            
+            const bgMusic = document.getElementById('bg-music');
+            bgMusic.pause(); bgMusic.currentTime = 0;
+
+            const soundBong = document.getElementById('sound-bong');
+            soundBong.volume = 1.0; soundBong.play();
+
+            const musicSuccess = document.getElementById('music-success');
+            const musicFail = document.getElementById('music-fail');
+
+            let message = ""; let stampText = ""; let stampColor = "";
+
+            if (offeringValue.startsWith('bad')) {
+                message = `Con <strong>${name}</strong> đã không thành tâm, Bottas sẽ không phù hộ cho con, con sẽ rớt môn <strong>${subject}</strong> vào ngày <strong>${dateFormatted}</strong>, thân mến!`;
+                stampText = "TỪ CHỐI ĐỘ"; stampColor = "#555"; 
+                musicFail.volume = 1.0; musicFail.play();
+            } else {
+                message = `Bottas vivj xác nhận sẽ phù hộ độ trì cho <strong>${name}</strong> thi môn <strong>${subject}</strong> vào ngày <strong>${dateFormatted}</strong> để mọi việc diễn ra suôn sẻ và thuận lợi, con sẽ được aquamon.`;
+                stampText = "PHÊ CHUẨN"; stampColor = "red";
+                musicSuccess.volume = 1.0; musicSuccess.play();
+            }
+
+            const resultBox = document.getElementById('result-content');
+            const stampBox = document.getElementById('stamp-box');
+            resultBox.innerHTML = message;
+            stampBox.innerText = stampText;
+            stampBox.style.color = stampColor;
+            stampBox.style.borderColor = stampColor;
+
+            document.getElementById('screen-form').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiện ích Cô giáo Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@700&family=Pangolin&display=swap" rel="stylesheet">
+    <style>
+        /* --- CẤU HÌNH CHUNG --- */
+        body {
+            margin: 0; padding: 0;
+            min-height: 100vh;
+            /* Font chữ mặc định */
+            font-family: 'Charm', cursive; 
+            /* Nền chính: Làm tối đi một chút để nổi bật cái sớ */
+            background: linear-gradient(rgba(40, 0, 0, 0.6), rgba(40, 0, 0, 0.6)), url('images/background.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; /* Chặn thanh cuộn */
+        }
+
+        /* --- CUỘN SỚ (Main Container) --- */
+        .royal-scroll {
+            position: relative;
+            width: 90%; max-width: 450px;
+            /* Màu giấy dó (giấy cũ) */
+            background-color: #fffdf0;
+            background-image: radial-gradient(#f4e1c1 15%, transparent 16%), radial-gradient(#f4e1c1 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            
+            padding: 60px 30px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+            
+            /* Viền trang trí kiểu cũ */
+            border: 5px double #b71c1c; /* Đỏ đậm */
+            outline: 2px solid #daa520; /* Vàng đồng */
+            outline-offset: 5px;
+        }
+
+        /* Trục cuốn sớ (Trên và Dưới) */
+        .royal-scroll::before, .royal-scroll::after {
+            content: ''; position: absolute; left: -20px; right: -20px; height: 30px;
+            background: linear-gradient(to right, #5d4037, #8d6e63, #5d4037);
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+        .royal-scroll::before { top: -15px; }
+        .royal-scroll::after { bottom: -15px; }
+
+        /* Hoa văn góc (Hoa hoè hoa sói) */
+        .corner-flower {
+            position: absolute; font-size: 40px; z-index: 10;
+            animation: spinFlower 10s linear infinite;
+        }
+        .tl { top: -10px; left: -10px; color: #d32f2f; }
+        .tr { top: -10px; right: -10px; color: #ffd700; }
+        .bl { bottom: -10px; left: -10px; color: #ffd700; }
+        .br { bottom: -10px; right: -10px; color: #d32f2f; }
+
+        /* --- TIÊU ĐỀ --- */
+        h1.title {
+            font-size: 4em; margin: 0 0 40px 0;
+            color: #b71c1c; /* Đỏ đô */
+            text-shadow: 2px 2px 0px #ffd700; /* Bóng vàng */
+            line-height: 1.2;
+            position: relative;
+            z-index: 5;
+        }
+        /* Dòng phụ nhỏ bên dưới */
+        h1.title span {
+            display: block; font-size: 0.4em; color: #555; font-family: 'Pangolin', cursive; margin-top: 10px;
+        }
+
+        /* --- NÚT BẤM (Kiểu thẻ bài/lì xì) --- */
+        .btn-container {
+            display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5;
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            padding: 15px 10px;
+            font-size: 2em;
+            color: #fff;
+            background: #b71c1c; /* Nền đỏ */
+            border: 2px solid #ffd700; /* Viền vàng */
+            border-radius: 5px; /* Bo góc ít thôi cho cổ điển */
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 #8b0000; /* Tạo độ nổi 3D khối */
+        }
+
+        /* Họa tiết mây trên nút */
+        .btn::before {
+            content: '☁️'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 0.6em; opacity: 0.7;
+        }
+        .btn::after {
+            content: '☁️'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 0.6em; opacity: 0.7;
+        }
+
+        /* Màu riêng cho từng nút nếu muốn, hoặc để đỏ hết cho đồng bộ */
+        .btn:hover {
+            transform: translateY(2px); /* Nhấn xuống */
+            box-shadow: 0 2px 0 #8b0000;
+            background: #d32f2f;
+            color: #ffeb3b;
+        }
+
+        /* --- HIỆU ỨNG HOA RƠI (CSS) --- */
+        .falling-leaves {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
+        }
+        .leaf {
+            position: absolute; top: -10%;
+            font-size: 20px; animation: fall linear infinite;
+        }
+        .leaf:nth-child(1) { left: 10%; animation-duration: 10s; animation-delay: 0s; }
+        .leaf:nth-child(2) { left: 30%; animation-duration: 12s; animation-delay: 2s; font-size: 30px;}
+        .leaf:nth-child(3) { left: 70%; animation-duration: 8s; animation-delay: 4s; }
+        .leaf:nth-child(4) { left: 90%; animation-duration: 15s; animation-delay: 1s; font-size: 25px;}
+
+        /* ANIMATION */
+        @keyframes spinFlower { 100% { transform: rotate(360deg); } }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="falling-leaves">
+        <div class="leaf">🌸</div>
+        <div class="leaf">💮</div>
+        <div class="leaf">🏵️</div>
+        <div class="leaf">🌸</div>
+    </div>
+
+    <div class="royal-scroll">
+        <div class="corner-flower tl">🌸</div>
+        <div class="corner-flower tr">🏵️</div>
+        <div class="corner-flower bl">🏵️</div>
+        <div class="corner-flower br">🌸</div>
+
+        <h1 class="title">
+            Tiện Ích<br>Cô Giáo Online
+            <span>(Tâm linh tuỳ tâm)</span>
+        </h1>
+        
+        <div class="btn-container">
+            <a href="thapnhang.html" class="btn">Thắp Nhang</a>
+            <a href="caumay.html" class="btn">Cầu May</a>
+            <a href="gieoque.html" class="btn">Gieo Quẻ</a>
+        </div>
+    </div>
+
+</body>
+</html>

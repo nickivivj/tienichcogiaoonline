@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Xin Xăm Pro (Update Paths)</title>
+    <style>
+        /* --- KHU VỰC CHỈNH TỈ LỆ --- */
+        :root {
+            --box-width: 300px; 
+            --stick-height: 85%; 
+            --holder-width: 30%; 
+        }
+
+        body {
+            margin: 0; padding: 0; height: 100vh;
+            background-color: #3e2723;
+            /* [UPDATE] Đường dẫn ảnh nền */
+            background-image: url('images/bg_altar.jpg');
+            background-size: cover; background-position: center bottom;
+            font-family: 'Times New Roman', serif;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+        }
+
+        .stage {
+            position: relative;
+            width: 100%; height: 80vh;
+            display: flex; justify-content: center; align-items: flex-end;
+            padding-bottom: 0px;
+        }
+
+        #shaker-group {
+            position: relative;
+            width: var(--box-width);
+            height: calc(var(--box-width) * 1.5); 
+            transform-origin: bottom center;
+            z-index: 10;
+        }
+
+        #shadow-base {
+            position: absolute;
+            bottom: -10px; left: 5%;
+            width: 90%; height: 20px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1; transform-origin: center bottom;
+            animation: shadowShake 0.15s ease-in-out infinite paused;
+        }
+
+        #container-img {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: contain; 
+            z-index: 20; 
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.7));
+            pointer-events: none;
+        }
+
+        #stick-holder {
+            position: absolute;
+            width: var(--holder-width);
+            left: 50%; transform: translateX(-50%); 
+            bottom: 55%; 
+            height: var(--stick-height);
+            z-index: 5; 
+            display: flex; justify-content: center; align-items: flex-end;
+        }
+
+        .stick {
+            position: absolute;
+            bottom: 0;
+            width: calc(var(--box-width) / 12); 
+            height: 100%; 
+            transform-origin: bottom center;
+            transition: transform 0.2s;
+        }
+
+        #shake-btn {
+            margin-bottom: 40px; padding: 15px 50px;
+            font-size: 18px; text-transform: uppercase; letter-spacing: 2px;
+            background: linear-gradient(to bottom, #d4af37, #b8860b);
+            color: #5c0000; border: 2px solid #fff; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            font-weight: bold; z-index: 30;
+        }
+        #shake-btn:active { transform: scale(0.95); }
+        #shake-btn:disabled { background: #555; color: #999; filter: grayscale(1); }
+
+        /* ANIMATIONS */
+        .group-shaking { animation: shakeContainer 0.15s ease-in-out infinite; }
+        @keyframes shakeContainer {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            25% { transform: rotate(5deg) translate(3px, 0); }
+            50% { transform: rotate(0deg) translate(0, -5px); }
+            75% { transform: rotate(-5deg) translate(-3px, 0); }
+            100% { transform: rotate(0deg) translate(0, 0); }
+        }
+
+        .shadow-shaking { animation-play-state: running !important; }
+        @keyframes shadowShake {
+            0%, 100% { transform: scaleX(1) translateX(0); opacity: 0.6; }
+            50% { transform: scaleX(1.1) translateX(2px); opacity: 0.4; }
+        }
+
+        .stick-rattle { animation: rattleStick 0.2s ease-in-out infinite alternate; }
+        @keyframes rattleStick {
+            from { transform: translateX(-50%) rotate(var(--r-angle)) translateY(0); }
+            to { transform: translateX(-50%) rotate(var(--r-angle)) translateY(-10px); } 
+        }
+
+        .stick-flying {
+            z-index: 50 !important;
+            animation: flyOut 1.5s ease-out forwards;
+        }
+        @keyframes flyOut {
+            0% { bottom: 0; transform: translateX(-50%) rotate(var(--r-angle)); }
+            40% { bottom: 150%; transform: translateX(-50%) rotate(-5deg); }
+            100% { bottom: -120px; transform: translateX(80px) rotate(80deg); } 
+        }
+
+        /* KẾT QUẢ */
+        #result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100;
+            display: none; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .result-paper {
+            background: #fffdf0; color: #5c0000; padding: 30px;
+            width: 85%; max-width: 350px;
+            border: 8px solid transparent;
+            border-image: linear-gradient(to bottom, #d4af37, #8B0000) 1;
+            text-align: center; box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+        .stick-number { font-size: 3.5em; font-weight: bold; margin: 15px 0; color: #d63031; }
+    </style>
+</head>
+<body>
+    <audio id="sound-shaking" src="sounds/shaking.mp3" loop></audio>
+    <audio id="sound-fall" src="sounds/stick_fall.mp3"></audio>
+    <audio id="bg-music" src="sounds/bgmusic.mp3" loop></audio>
+    <audio id="sound-result" src="sounds/bong.mp3"></audio>
+
+    <div class="stage">
+        <div id="shaker-group">
+            <div id="shadow-base"></div>
+            <img src="images/container.png" id="container-img" alt="Ống xăm">
+            <div id="stick-holder"></div>
+        </div>
+    </div>
+
+    <button id="shake-btn" onclick="startProcess()">GIEO QUẺ</button>
+
+    <div id="result-overlay">
+        <div class="result-paper">
+            <h3 style="margin:0; opacity:0.6;">KẾT QUẢ</h3>
+            <div class="stick-number" id="res-num">01</div>
+            <div id="res-text">...</div>
+            <button onclick="closeResult()" style="margin-top:20px; padding:10px 30px; cursor:pointer;">XIN LẠI</button>
+        </div>
+    </div>
+
+    <script>
+        const fortunes = [
+            { id: 1, text: "Thượng Thượng: Mọi việc như l." },
+            { id: 2, text: "Trung Bình: Nên chờ đợi thời tiết." },
+            { id: 3, text: "Hạ Hạ: Cẩn thận đi lại, lời nói." },
+            { id: 4, text: "Thượng Cát: Có vivj phù trợ." },
+            { id: 5, text: "Trung Cát: Gia đạo bình nước." }
+        ];
+
+        const STICK_COUNT = 12;
+        /* [UPDATE] Đường dẫn ảnh thẻ */
+        const stickImgSrc = 'images/stick.png';
+
+        const holder = document.getElementById('stick-holder');
+        const shakerGroup = document.getElementById('shaker-group');
+        const shadowBase = document.getElementById('shadow-base');
+        const shakeBtn = document.getElementById('shake-btn');
+        const overlay = document.getElementById('result-overlay');
+
+        // Âm thanh
+        const soundShake = document.getElementById('sound-shaking');
+        const soundFall = document.getElementById('sound-fall');
+        const soundResult = document.getElementById('sound-result');
+        const bgMusic = document.getElementById('bg-music');
+
+        function initSticks() {
+            holder.innerHTML = ''; 
+            for (let i = 0; i < STICK_COUNT; i++) {
+                let img = document.createElement('img');
+                img.src = stickImgSrc;
+                img.classList.add('stick');
+                let randomAngle = Math.floor(Math.random() * 20) - 10;
+                img.style.setProperty('--r-angle', randomAngle + 'deg');
+                img.style.transform = `translateX(-50%) rotate(${randomAngle}deg)`;
+                let randomY = Math.floor(Math.random() * 15);
+                img.style.bottom = `-${randomY}px`;
+                holder.appendChild(img);
+            }
+        }
+        initSticks();
+
+        function startProcess() {
+            // [NEW] Kích hoạt nhạc nền ngay lần bấm đầu tiên
+            // (Vì trình duyệt chặn tự phát nếu người dùng chưa tương tác)
+            if (bgMusic.paused) {
+                bgMusic.volume = 0.5; // Âm lượng vừa phải
+                bgMusic.play().catch(e => console.log("Chưa phát được nhạc nền: " + e));
+            }
+
+            shakeBtn.disabled = true;
+            shakeBtn.innerText = "ĐANG KHẤN...";
+
+            const oldFlying = document.querySelector('.stick-flying');
+            if (oldFlying) {
+                oldFlying.classList.remove('stick-flying');
+                initSticks();
+            }
+
+            shakerGroup.classList.add('group-shaking');
+            shadowBase.classList.add('shadow-shaking');
+            
+            soundShake.currentTime = 0; soundShake.play();
+            const allSticks = document.querySelectorAll('.stick');
+            allSticks.forEach(s => s.classList.add('stick-rattle'));
+
+            setTimeout(() => {
+                shakerGroup.classList.remove('group-shaking');
+                shadowBase.classList.remove('shadow-shaking');
+
+                allSticks.forEach(s => s.classList.remove('stick-rattle'));
+                soundShake.pause();
+
+                const randomIndex = Math.floor(Math.random() * allSticks.length);
+                const chosenStick = allSticks[randomIndex];
+                chosenStick.classList.add('stick-flying');
+                soundFall.currentTime = 0; soundFall.play();
+
+            }, 3000);
+
+            setTimeout(() => {
+                showResult();
+                shakeBtn.disabled = false;
+                shakeBtn.innerText = "GIEO QUẺ";
+            }, 4500);
+        }
+
+        function showResult() {
+            const index = Math.floor(Math.random() * fortunes.length);
+            const data = fortunes[index];
+            document.getElementById('res-num').innerText = "SỐ " + data.id;
+            document.getElementById('res-text').innerText = data.text;
+            
+            // [NEW] Phát tiếng Bong khi hiện kết quả
+            soundResult.currentTime = 0;
+            soundResult.play();
+
+            overlay.style.display = 'flex';
+        }
+
+        function closeResult() {
+            overlay.style.display = 'none';
+            initSticks();
+        }
+    </script>
+</body>
+</html>
