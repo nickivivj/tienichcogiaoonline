@@ -2,57 +2,67 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tiện ích Cô giáo Online</title>
     <link href="https://fonts.googleapis.com/css2?family=Charm:wght@700&family=Pangolin&display=swap" rel="stylesheet">
     <style>
         /* --- CẤU HÌNH CHUNG --- */
+        * { box-sizing: border-box; } /* Quan trọng để tính toán kích thước không bị lệch */
+
         body {
-            margin: 0; padding: 0;
-            min-height: 100vh;
+            margin: 0; padding: 20px;
+            width: 100vw; 
+            min-height: 100vh; /* Đảm bảo luôn full màn hình */
+            
             /* Font chữ mặc định */
             font-family: 'Charm', cursive; 
-            /* Nền chính: Làm tối đi một chút để nổi bật cái sớ */
-            background: linear-gradient(rgba(40, 0, 0, 0.6), rgba(40, 0, 0, 0.6)), url('images/background.jpg');
+            /* Nền chính */
+            background: linear-gradient(rgba(40, 0, 0, 0.6), rgba(40, 0, 0, 0.6)), url('images/bg_altar.jpg'); /* Giả sử bạn dùng chung bg */
+            background-color: #3e2723; /* Màu dự phòng nếu lỗi ảnh */
             background-size: cover; background-position: center; background-attachment: fixed;
+            
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden; /* Chặn thanh cuộn */
+            overflow-x: hidden; /* Chỉ chặn cuộn ngang */
         }
 
         /* --- CUỘN SỚ (Main Container) --- */
         .royal-scroll {
             position: relative;
-            width: 90%; max-width: 450px;
-            /* Màu giấy dó (giấy cũ) */
+            width: 100%; 
+            max-width: 450px; /* Giới hạn chiều rộng trên máy tính */
+            
+            /* Màu giấy dó */
             background-color: #fffdf0;
             background-image: radial-gradient(#f4e1c1 15%, transparent 16%), radial-gradient(#f4e1c1 15%, transparent 16%);
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
             
-            padding: 60px 30px;
+            padding: 50px 20px; /* Padding gọn hơn chút trên mobile */
             text-align: center;
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
             
-            /* Viền trang trí kiểu cũ */
-            border: 5px double #b71c1c; /* Đỏ đậm */
-            outline: 2px solid #daa520; /* Vàng đồng */
-            outline-offset: 5px;
+            /* Viền trang trí */
+            border: 4px double #b71c1c;
+            outline: 2px solid #daa520;
+            outline-offset: 4px;
+            border-radius: 2px;
+            z-index: 10;
         }
 
-        /* Trục cuốn sớ (Trên và Dưới) */
+        /* Trục cuốn sớ */
         .royal-scroll::before, .royal-scroll::after {
-            content: ''; position: absolute; left: -20px; right: -20px; height: 30px;
+            content: ''; position: absolute; left: -15px; right: -15px; height: 25px;
             background: linear-gradient(to right, #5d4037, #8d6e63, #5d4037);
             border-radius: 15px;
             box-shadow: 0 5px 10px rgba(0,0,0,0.5);
             z-index: 2;
         }
-        .royal-scroll::before { top: -15px; }
-        .royal-scroll::after { bottom: -15px; }
+        .royal-scroll::before { top: -12px; }
+        .royal-scroll::after { bottom: -12px; }
 
-        /* Hoa văn góc (Hoa hoè hoa sói) */
+        /* Hoa văn góc */
         .corner-flower {
-            position: absolute; font-size: 40px; z-index: 10;
+            position: absolute; font-size: 30px; z-index: 10;
             animation: spinFlower 10s linear infinite;
         }
         .tl { top: -10px; left: -10px; color: #d32f2f; }
@@ -60,72 +70,75 @@
         .bl { bottom: -10px; left: -10px; color: #ffd700; }
         .br { bottom: -10px; right: -10px; color: #d32f2f; }
 
-        /* --- TIÊU ĐỀ --- */
+        /* --- TIÊU ĐỀ (Tối ưu responsive) --- */
         h1.title {
-            font-size: 4em; margin: 0 0 40px 0;
-            color: #b71c1c; /* Đỏ đô */
-            text-shadow: 2px 2px 0px #ffd700; /* Bóng vàng */
+            margin: 0 0 30px 0;
+            color: #b71c1c;
+            text-shadow: 2px 2px 0px #ffd700;
             line-height: 1.2;
             position: relative;
             z-index: 5;
+            
+            /* Tự động chỉnh cỡ chữ: Nhỏ nhất 2.5rem, Ưu tiên 10% chiều rộng, Lớn nhất 4rem */
+            font-size: clamp(2.5rem, 10vw, 4rem); 
         }
-        /* Dòng phụ nhỏ bên dưới */
+        
         h1.title span {
-            display: block; font-size: 0.4em; color: #555; font-family: 'Pangolin', cursive; margin-top: 10px;
+            display: block; 
+            font-size: 0.4em; 
+            color: #555; 
+            font-family: 'Pangolin', cursive; 
+            margin-top: 5px;
         }
 
-        /* --- NÚT BẤM (Kiểu thẻ bài/lì xì) --- */
+        /* --- NÚT BẤM --- */
         .btn-container {
-            display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5;
+            display: flex; flex-direction: column; gap: 15px; position: relative; z-index: 5;
         }
 
         .btn {
             display: block;
             text-decoration: none;
-            padding: 15px 10px;
-            font-size: 2em;
+            padding: 12px 10px;
+            
+            /* Cỡ chữ nút cũng tự co giãn */
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            
             color: #fff;
-            background: #b71c1c; /* Nền đỏ */
-            border: 2px solid #ffd700; /* Viền vàng */
-            border-radius: 5px; /* Bo góc ít thôi cho cổ điển */
+            background: #b71c1c;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
             position: relative;
-            transition: all 0.3s;
-            box-shadow: 0 4px 0 #8b0000; /* Tạo độ nổi 3D khối */
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #8b0000;
+            font-family: 'Pangolin', cursive; /* Dùng font dễ đọc hơn cho nút */
         }
 
-        /* Họa tiết mây trên nút */
-        .btn::before {
-            content: '☁️'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            font-size: 0.6em; opacity: 0.7;
-        }
-        .btn::after {
-            content: '☁️'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-            font-size: 0.6em; opacity: 0.7;
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #8b0000;
         }
 
-        /* Màu riêng cho từng nút nếu muốn, hoặc để đỏ hết cho đồng bộ */
-        .btn:hover {
-            transform: translateY(2px); /* Nhấn xuống */
-            box-shadow: 0 2px 0 #8b0000;
-            background: #d32f2f;
-            color: #ffeb3b;
-        }
+        /* Icon mây trên nút */
+        .btn::before { content: '☁️'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.6em; opacity: 0.7; }
+        .btn::after { content: '☁️'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.6em; opacity: 0.7; }
 
-        /* --- HIỆU ỨNG HOA RƠI (CSS) --- */
+        /* --- HIỆU ỨNG HOA RƠI --- */
         .falling-leaves {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; /* Đổi thành fixed để luôn phủ toàn màn hình */
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; overflow: hidden;
         }
         .leaf {
             position: absolute; top: -10%;
             font-size: 20px; animation: fall linear infinite;
         }
+        /* Random vị trí hoa */
         .leaf:nth-child(1) { left: 10%; animation-duration: 10s; animation-delay: 0s; }
         .leaf:nth-child(2) { left: 30%; animation-duration: 12s; animation-delay: 2s; font-size: 30px;}
         .leaf:nth-child(3) { left: 70%; animation-duration: 8s; animation-delay: 4s; }
         .leaf:nth-child(4) { left: 90%; animation-duration: 15s; animation-delay: 1s; font-size: 25px;}
 
-        /* ANIMATION */
         @keyframes spinFlower { 100% { transform: rotate(360deg); } }
         @keyframes fall {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
@@ -158,6 +171,7 @@
             <a href="thapnhang.html" class="btn">Thắp Nhang</a>
             <a href="caumay.html" class="btn">Cầu May</a>
             <a href="gieoque.html" class="btn">Gieo Quẻ</a>
+            <a href="hailoc.html" class="btn">Hái Lộc Đầu Năm</a>
         </div>
     </div>
 
